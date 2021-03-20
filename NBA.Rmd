@@ -1,0 +1,62 @@
+---
+title: "NBA Data"
+author: "Joe DiNoto"
+date: "3/20/2021"
+output: 
+  html_document: 
+    keep_md: yes
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+First, load packages.
+
+```{r message=FALSE,warning=FALSE,error=FALSE}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+library(tidytuesdayR)
+library(scales)
+```
+
+Second, grab the data.
+
+```{r}
+player_data <- read.csv("player_data.xls")
+players <- read.csv("Players.xls")
+seasons_stats <- read.csv("Seasons_Stats.csv")
+```
+
+Grab the player name, year, and team. 
+```{r}
+nba <- seasons_stats %>%
+  select(Year, Player, Tm) %>%
+  filter(!is.na(Year)) #remove NAs 
+```
+
+What are the range of years? 
+
+```{r}
+summary(nba$Year)
+```
+
+Which player stayed with a team the longest? (1950-2017)
+```{r}
+nba %>%
+  count(Player,Tm, sort=TRUE) %>%
+  head(20)
+```
+
+What is the distribution of how long a player stays with a team?
+
+```{r}
+nba %>%
+  count(Player,Tm, sort=TRUE) %>%
+  ggplot(aes(Player,n)) +
+  geom_line()
+
+```
+
+
