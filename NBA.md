@@ -93,4 +93,93 @@ nba %>%
 
 ![](NBA_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
+Who played for the most teams?
+
+```r
+nba %>%
+  count(Player,Tm)%>%
+  count(Player, sort=TRUE) %>%
+  head(20)
+```
+
+```
+##              Player  n
+## 1    George Johnson 14
+## 2   Tony Massenburg 14
+## 3      Chucky Brown 13
+## 4       Jim Jackson 13
+## 5         Joe Smith 13
+## 6       Kevin Ollie 13
+## 7      Lou Amundson 12
+## 8        Mike James 12
+## 9    Aaron Williams 11
+## 10      Damon Jones 11
+## 11      Drew Gooden 11
+## 12     Earl Boykins 11
+## 13 Gerald Henderson 11
+## 14        Ish Smith 11
+## 15       John Lucas 11
+## 16      Mark Bryant 11
+## 17  Reggie Williams 11
+## 18   Rod Strickland 11
+## 19     Andre Miller 10
+## 20 Anthony Goldwire 10
+```
+There were three (3) George Johnsons in the NBA.
+
+```r
+player_data %>%
+  filter(name=="George Johnson")
+```
+
+```
+##             name year_start year_end position height weight        birth_date
+## 1 George Johnson       1971     1974        C   6-11    245     June 19, 1947
+## 2 George Johnson       1973     1986      C-F   6-11    205 December 18, 1948
+## 3 George Johnson       1979     1986      F-C    6-7    210  December 8, 1956
+##                              college
+## 1 Stephen F. Austin State University
+## 2                 Dillard University
+## 3              St. John's University
+```
+
+Which means Tony Massenburg is the player who has played on the most teams (14). 
+
+```r
+player_data %>%
+  filter(name == "Tony Massenburg")
+```
+
+```
+##              name year_start year_end position height weight    birth_date
+## 1 Tony Massenburg       1991     2005        F    6-9    220 July 31, 1967
+##                  college
+## 1 University of Maryland
+```
+
+Which 14 teams did he play for? 
+
+```r
+nba %>% 
+  filter(Player=="Tony Massenburg") %>%
+  count(Tm, sort=TRUE)
+```
+
+```
+##     Tm n
+## 1  SAS 3
+## 2  VAN 3
+## 3  TOT 2
+## 4  BOS 1
+## 5  CHH 1
+## 6  GSW 1
+## 7  HOU 1
+## 8  LAC 1
+## 9  MEM 1
+## 10 NJN 1
+## 11 PHI 1
+## 12 SAC 1
+## 13 TOR 1
+## 14 UTA 1
+```
 

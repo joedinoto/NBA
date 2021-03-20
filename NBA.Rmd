@@ -59,4 +59,29 @@ nba %>%
 
 ```
 
+Who played for the most teams?
+```{r}
+nba %>%
+  count(Player,Tm)%>%
+  count(Player, sort=TRUE) %>%
+  head(20)
+```
+There were three (3) George Johnsons in the NBA.
+```{r}
+player_data %>%
+  filter(name=="George Johnson")
+```
+
+Which means Tony Massenburg is the player who has played on the most teams (14). 
+```{r}
+player_data %>%
+  filter(name == "Tony Massenburg")
+```
+
+Which 14 teams did he play for? 
+```{r}
+nba %>% 
+  filter(Player=="Tony Massenburg") %>%
+  count(Tm, sort=TRUE)
+```
 
