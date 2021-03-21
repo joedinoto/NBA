@@ -162,24 +162,144 @@ Which 14 teams did he play for?
 ```r
 nba %>% 
   filter(Player=="Tony Massenburg") %>%
-  count(Tm, sort=TRUE)
+  count(Year, Tm, sort=TRUE)
 ```
 
 ```
-##     Tm n
-## 1  SAS 3
-## 2  VAN 3
-## 3  TOT 2
-## 4  BOS 1
-## 5  CHH 1
-## 6  GSW 1
-## 7  HOU 1
-## 8  LAC 1
-## 9  MEM 1
-## 10 NJN 1
-## 11 PHI 1
-## 12 SAC 1
-## 13 TOR 1
-## 14 UTA 1
+##    Year  Tm n
+## 1  1991 SAS 1
+## 2  1992 BOS 1
+## 3  1992 CHH 1
+## 4  1992 GSW 1
+## 5  1992 SAS 1
+## 6  1992 TOT 1
+## 7  1995 LAC 1
+## 8  1996 PHI 1
+## 9  1996 TOR 1
+## 10 1996 TOT 1
+## 11 1997 NJN 1
+## 12 1998 VAN 1
+## 13 1999 VAN 1
+## 14 2000 HOU 1
+## 15 2001 VAN 1
+## 16 2002 MEM 1
+## 17 2003 UTA 1
+## 18 2004 SAC 1
+## 19 2005 SAS 1
 ```
+
+Histogram for height of players: 
+
+
+```r
+player_data %>%
+  filter(!is.na(height))%>%
+  count(height) 
+```
+
+```
+##    height   n
+## 1           1
+## 2    5-10  48
+## 3    5-11  61
+## 4     5-3   2
+## 5     5-5   1
+## 6     5-6   2
+## 7     5-7   6
+## 8     5-8   3
+## 9     5-9  15
+## 10    6-0 150
+## 11    6-1 229
+## 12   6-10 324
+## 13   6-11 229
+## 14    6-2 327
+## 15    6-3 401
+## 16    6-4 340
+## 17    6-5 418
+## 18    6-6 403
+## 19    6-7 473
+## 20    6-8 426
+## 21    6-9 424
+## 22    7-0 164
+## 23    7-1  52
+## 24    7-2  26
+## 25    7-3  13
+## 26    7-4   4
+## 27    7-5   4
+## 28    7-6   2
+## 29    7-7   2
+```
+Tansform the `height` column. Split it up into feet and inches, then mutate to create decimal height (in feet).
+
+
+```r
+player_data <- player_data %>%
+  separate(height,c("feet","inches"))
+```
+
+```
+## Warning: Expected 2 pieces. Missing pieces filled with `NA` in 1 rows [2143].
+```
+
+```r
+str(player_data)
+```
+
+```
+## 'data.frame':	4550 obs. of  9 variables:
+##  $ name      : chr  "Alaa Abdelnaby" "Zaid Abdul-Aziz" "Kareem Abdul-Jabbar" "Mahmoud Abdul-Rauf" ...
+##  $ year_start: int  1991 1969 1970 1991 1998 1997 1977 1957 1947 2017 ...
+##  $ year_end  : int  1995 1978 1989 2001 2003 2008 1981 1957 1948 2018 ...
+##  $ position  : chr  "F-C" "C-F" "C" "G" ...
+##  $ feet      : chr  "6" "6" "7" "6" ...
+##  $ inches    : chr  "10" "9" "2" "1" ...
+##  $ weight    : int  240 235 225 162 223 225 220 180 195 190 ...
+##  $ birth_date: chr  "June 24, 1968" "April 7, 1946" "April 16, 1947" "March 9, 1969" ...
+##  $ college   : chr  "Duke University" "Iowa State University" "University of California, Los Angeles" "Louisiana State University" ...
+```
+
+```r
+player_data <- player_data %>%
+  mutate(height = as.numeric(feet)+as.numeric(inches)/12) # this creates the height column as numeric. 
+```
+
+
+```r
+player_data %>%
+  filter(!is.na(weight))%>%
+  ggplot(aes(weight))+
+  geom_histogram(bins=50)
+```
+
+![](NBA_files/figure-html/unnamed-chunk-15-1.png)<!-- -->
+
+```r
+player_data %>%
+  filter(!is.na(height))%>%
+  ggplot(aes(height))+
+  geom_histogram(bins=25)
+```
+
+![](NBA_files/figure-html/unnamed-chunk-16-1.png)<!-- -->
+
+```r
+player_data %>%
+  filter(!is.na(weight))%>%
+  ggplot(aes(weight))+
+  geom_boxplot()
+```
+
+![](NBA_files/figure-html/unnamed-chunk-17-1.png)<!-- -->
+
+
+```r
+player_data %>%
+  filter(!is.na(weight))%>%
+  filter(!is.na(height))%>%
+  ggplot(aes(height,weight))+
+  geom_point()+
+  facet_wrap(.~position)
+```
+
+![](NBA_files/figure-html/unnamed-chunk-18-1.png)<!-- -->
 
