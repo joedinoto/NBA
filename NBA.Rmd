@@ -82,6 +82,56 @@ Which 14 teams did he play for?
 ```{r}
 nba %>% 
   filter(Player=="Tony Massenburg") %>%
-  count(Tm, sort=TRUE)
+  count(Year, Tm, sort=TRUE)
+```
+
+Histogram for height of players: 
+
+```{r}
+player_data %>%
+  filter(!is.na(height))%>%
+  count(height) 
+
+```
+Tansform the `height` column. Split it up into feet and inches, then mutate to create decimal height (in feet).
+
+```{r}
+player_data <- player_data %>%
+  separate(height,c("feet","inches"))
+```
+```{r}
+str(player_data)
+```
+```{r}
+player_data <- player_data %>%
+  mutate(height = as.numeric(feet)+as.numeric(inches)/12) # this creates the height column as numeric. 
+```
+
+```{r}
+player_data %>%
+  filter(!is.na(weight))%>%
+  ggplot(aes(weight))+
+  geom_histogram(bins=50)
+```
+```{r}
+player_data %>%
+  filter(!is.na(height))%>%
+  ggplot(aes(height))+
+  geom_histogram(bins=25)
+```
+```{r}
+player_data %>%
+  filter(!is.na(weight))%>%
+  ggplot(aes(weight))+
+  geom_boxplot()
+```
+
+```{r}
+player_data %>%
+  filter(!is.na(weight))%>%
+  filter(!is.na(height))%>%
+  ggplot(aes(height,weight))+
+  geom_point()+
+  facet_wrap(.~position)
 ```
 
